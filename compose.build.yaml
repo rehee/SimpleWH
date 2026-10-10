@@ -1,0 +1,5 @@
+# Only local source builds use this override. Registry deployments use compose.yaml.
+services:
+  app:
+    build: .
+    pull_policy: never
