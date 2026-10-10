@@ -62,7 +62,6 @@ try {
     try { Invoke-Deployment 'up.ps1' } catch { $failed = $_.Exception.Message -match '\.env' }
     Assert-True $failed 'Missing .env must be reported.'
     Assert-True ($global:DeploymentCalls.Count -eq 0) 'Missing configuration must not call Docker.'
-    Write-Host 'Deployment script checks passed.'
 } finally {
     Remove-Item -LiteralPath Function:\docker
     Remove-Variable DeploymentCalls, DeploymentFailure -Scope Global
@@ -72,3 +71,8 @@ try {
         Remove-Item -LiteralPath $resolvedTestRoot -Recurse -Force
     }
 }
+
+# Expected failure cases deliberately set this to 17. GitHub's pwsh runner
+# checks LASTEXITCODE after invoking this script, so clear it only on success.
+$global:LASTEXITCODE = 0
+Write-Host 'Deployment script checks passed.'
