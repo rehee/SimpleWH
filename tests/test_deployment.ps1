@@ -55,7 +55,8 @@ try {
         Assert-True ((Get-Location).Path -eq $originalLocation) 'Failed command must restore the working directory.'
     }
     $global:DeploymentFailure = ''
-    Remove-Item -LiteralPath (Join-Path $testRoot '.env')
+    # Dotfiles are hidden on Linux and require -Force in PowerShell.
+    Remove-Item -LiteralPath (Join-Path $testRoot '.env') -Force
     $global:DeploymentCalls.Clear()
     $failed = $false
     try { Invoke-Deployment 'up.ps1' } catch { $failed = $_.Exception.Message -match '\.env' }
